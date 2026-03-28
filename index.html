@@ -1004,7 +1004,7 @@
       const small = cropper.getCroppedCanvas({ width: 80, height: 80 });
       const suggestions = analyzeImageColors(small);
       renderColorChips(suggestions);
-      colorCard.style.display = '';
+      colorCard.style.display = 'block';
 
       // Apply the recommended color to the mock by default on first run
       if (!activeColorHex) {
