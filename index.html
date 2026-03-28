@@ -598,7 +598,7 @@
         <div class="preview-wrap">
           <canvas id="preview-canvas" width="228" height="228"></canvas>
         </div>
-        <p class="preview-label">1024 × 1024 px export</p>
+        <p class="preview-label" id="preview-label">1024 × 1024 px · transparent bg</p>
       </div>
 
       <!-- Auto-crop controls -->
@@ -715,6 +715,7 @@
   const paddingValue   = document.getElementById('padding-value');
   const filenameDisplay= document.getElementById('filename-display');
   const cropStatus     = document.getElementById('crop-status');
+  const previewLabel   = document.getElementById('preview-label');
   const colorCard      = document.getElementById('color-card');
   const colorChips     = document.getElementById('color-chips');
   const mockRail       = document.getElementById('mock-rail');
@@ -851,6 +852,10 @@
     try {
       const c = cropper.getCroppedCanvas({ width: size, height: size, imageSmoothingQuality: 'high' });
       ctx.clearRect(0, 0, size, size);
+      if (activeColorHex) {
+        ctx.fillStyle = activeColorHex;
+        ctx.fillRect(0, 0, size, size);
+      }
       ctx.drawImage(c, 0, 0, size, size);
     } catch(e) {}
   }
@@ -1035,8 +1040,10 @@
         navigator.clipboard.writeText(s.hex).catch(() => {});
         chip.classList.add('copied');
         setTimeout(() => chip.classList.remove('copied'), 1400);
-        applyMockColor(s.hex);
         activeColorHex = s.hex;
+        applyMockColor(s.hex);
+        updatePreview();
+        previewLabel.textContent = `1024 × 1024 px · bg ${s.hex}`;
         document.querySelectorAll('.color-chip').forEach(c => c.classList.remove('recommended'));
         chip.classList.add('recommended');
       });
