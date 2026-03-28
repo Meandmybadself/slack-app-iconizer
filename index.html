@@ -21,6 +21,8 @@
       --radius: 12px;
     }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       background: var(--bg);
       color: var(--text);
@@ -103,10 +105,7 @@
       background: rgba(79, 110, 247, 0.05);
     }
 
-    #drop-zone.drag-over {
-      background: rgba(79, 110, 247, 0.1);
-    }
-
+    #drop-zone.drag-over { background: rgba(79, 110, 247, 0.1); }
     #file-input { display: none; }
 
     .drop-icon {
@@ -121,10 +120,7 @@
 
     .drop-icon svg { opacity: 0.7; }
 
-    #drop-zone h2 {
-      font-size: 18px;
-      font-weight: 600;
-    }
+    #drop-zone h2 { font-size: 18px; font-weight: 600; }
 
     #drop-zone p {
       font-size: 14px;
@@ -180,15 +176,9 @@
       white-space: nowrap;
     }
 
-    .img-wrapper {
-      max-height: 600px;
-      overflow: hidden;
-    }
+    .img-wrapper { max-height: 600px; overflow: hidden; }
 
-    #crop-image {
-      display: block;
-      max-width: 100%;
-    }
+    #crop-image { display: block; max-width: 100%; }
 
     /* ── Sidebar ── */
     .sidebar {
@@ -256,11 +246,7 @@
 
     .btn:active { transform: scale(0.98); }
 
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-    }
-
+    .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:hover { background: var(--accent-dim); }
 
     .btn-secondary {
@@ -270,18 +256,6 @@
     }
 
     .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-
-    .btn-success {
-      background: var(--green);
-      color: #fff;
-    }
-
-    .btn-success:hover { opacity: 0.88; }
-
-    .divider {
-      height: 1px;
-      background: var(--border);
-    }
 
     .spec-row {
       display: flex;
@@ -347,11 +321,231 @@
       background: currentColor;
     }
 
-    #reset-btn {
-      margin-top: 4px;
+    /* ── Color suggestion card ── */
+    #color-card { display: none; }
+
+    .color-chips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
     }
 
-    /* Cropper overrides */
+    .color-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 6px 4px 8px;
+      border: 1px solid transparent;
+      transition: border-color 0.15s, background 0.15s;
+      position: relative;
+    }
+
+    .color-chip:hover { background: var(--surface2); border-color: var(--border); }
+
+    .color-chip.recommended { border-color: var(--accent); background: rgba(79,110,247,0.07); }
+
+    .chip-swatch {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Checkerboard behind swatch so we know it's actually a color not transparent */
+    .chip-swatch::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-conic-gradient(#333 0% 25%, #555 0% 50%) 0 0 / 8px 8px;
+      z-index: 0;
+    }
+
+    .chip-swatch-fill {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .chip-hex {
+      font-size: 11px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.03em;
+      color: var(--text);
+    }
+
+    .chip-label {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-align: center;
+    }
+
+    .chip-contrast {
+      font-size: 10px;
+      color: var(--green);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chip-copy-feedback {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 9px;
+      background: var(--green);
+      color: #fff;
+      padding: 1px 5px;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+
+    .color-chip.copied .chip-copy-feedback { opacity: 1; }
+
+    .rec-badge {
+      font-size: 9px;
+      background: var(--accent);
+      color: #fff;
+      padding: 1px 5px;
+      border-radius: 4px;
+      margin-bottom: 1px;
+    }
+
+    /* ── Slack mockup ── */
+    .slack-mock {
+      margin-top: 14px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .mock-header {
+      font-size: 10px;
+      color: var(--text-dim);
+      padding: 0 0 6px;
+    }
+
+    .mock-shell {
+      display: flex;
+      height: 90px;
+      border-radius: 7px;
+      overflow: hidden;
+    }
+
+    /* Narrow icon rail */
+    .mock-rail {
+      width: 34px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 0;
+      gap: 6px;
+      transition: background 0.3s;
+    }
+
+    .mock-workspace {
+      width: 22px;
+      height: 22px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .mock-divider {
+      width: 14px;
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    .mock-app-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Sidebar panel */
+    .mock-sidebar {
+      width: 82px;
+      display: flex;
+      flex-direction: column;
+      padding: 8px 8px;
+      gap: 2px;
+      transition: background 0.3s;
+    }
+
+    .mock-sidebar-title {
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mock-app-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .mock-icon-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .mock-app-name {
+      font-size: 9px;
+      color: rgba(255,255,255,0.9);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mock-channel {
+      font-size: 9px;
+      color: rgba(255,255,255,0.5);
+      padding: 2px 4px;
+    }
+
+    /* Main chat area */
+    .mock-main {
+      flex: 1;
+      background: #1a1d27;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+
+    .mock-msg {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .mock-msg:last-child { width: 60%; }
+
+    /* ── Cropper overrides ── */
     .cropper-view-box { outline-color: var(--accent); }
     .cropper-point { background-color: var(--accent); }
     .cropper-line { background-color: var(--accent); }
@@ -397,6 +591,7 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
+
       <!-- Preview -->
       <div class="card">
         <h3>Preview</h3>
@@ -406,7 +601,7 @@
         <p class="preview-label">1024 × 1024 px export</p>
       </div>
 
-      <!-- Controls -->
+      <!-- Auto-crop controls -->
       <div class="card">
         <h3>Auto-crop</h3>
         <button class="btn btn-secondary" id="auto-crop-btn">
@@ -415,19 +610,55 @@
           </svg>
           Re-detect content bounds
         </button>
-
         <div style="margin-top:14px">
           <label class="field-label" for="padding-slider">Padding (% of crop size)</label>
           <input type="range" id="padding-slider" min="0" max="20" value="5" step="1">
           <div class="padding-display"><span id="padding-value">5</span>%</div>
         </div>
-
         <button class="btn btn-secondary" id="reset-btn" style="margin-top:10px">
           Reset to full image
         </button>
       </div>
 
-      <!-- Specs -->
+      <!-- App color suggestion -->
+      <div class="card" id="color-card">
+        <h3>App color suggestion</h3>
+        <div class="color-chips" id="color-chips"></div>
+
+        <div class="slack-mock">
+          <div class="mock-shell">
+            <!-- Icon rail -->
+            <div class="mock-rail" id="mock-rail">
+              <div class="mock-workspace">W</div>
+              <div class="mock-divider"></div>
+              <div class="mock-app-dot">
+                <canvas id="mock-icon-canvas" width="22" height="22"></canvas>
+              </div>
+            </div>
+            <!-- Sidebar -->
+            <div class="mock-sidebar" id="mock-sidebar">
+              <div class="mock-sidebar-title">Workspace</div>
+              <div class="mock-app-row">
+                <div class="mock-icon-thumb">
+                  <canvas id="mock-icon-thumb-canvas" width="14" height="14"></canvas>
+                </div>
+                <span class="mock-app-name">Your App</span>
+              </div>
+              <div class="mock-channel"># general</div>
+              <div class="mock-channel"># random</div>
+            </div>
+            <!-- Chat area -->
+            <div class="mock-main">
+              <div class="mock-msg"></div>
+              <div class="mock-msg"></div>
+              <div class="mock-msg"></div>
+            </div>
+          </div>
+        </div>
+        <p class="preview-label" style="margin-top:6px">Click a color to apply to preview</p>
+      </div>
+
+      <!-- Slack specs -->
       <div class="card">
         <h3>Slack requirements</h3>
         <div class="spec-row">
@@ -463,6 +694,7 @@
           </button>
         </div>
       </div>
+
     </div>
   </div>
 </main>
@@ -470,39 +702,37 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 <script>
 (function () {
-  const dropZone     = document.getElementById('drop-zone');
-  const fileInput    = document.getElementById('file-input');
-  const editor       = document.getElementById('editor');
-  const cropImage    = document.getElementById('crop-image');
-  const previewCanvas= document.getElementById('preview-canvas');
-  const autoCropBtn  = document.getElementById('auto-crop-btn');
-  const exportBtn    = document.getElementById('export-btn');
-  const resetBtn     = document.getElementById('reset-btn');
-  const newImageBtn  = document.getElementById('new-image-btn');
-  const paddingSlider= document.getElementById('padding-slider');
-  const paddingValue = document.getElementById('padding-value');
-  const filenameDisplay = document.getElementById('filename-display');
-  const cropStatus   = document.getElementById('crop-status');
+  const dropZone       = document.getElementById('drop-zone');
+  const fileInput      = document.getElementById('file-input');
+  const editor         = document.getElementById('editor');
+  const cropImage      = document.getElementById('crop-image');
+  const previewCanvas  = document.getElementById('preview-canvas');
+  const autoCropBtn    = document.getElementById('auto-crop-btn');
+  const exportBtn      = document.getElementById('export-btn');
+  const resetBtn       = document.getElementById('reset-btn');
+  const newImageBtn    = document.getElementById('new-image-btn');
+  const paddingSlider  = document.getElementById('padding-slider');
+  const paddingValue   = document.getElementById('padding-value');
+  const filenameDisplay= document.getElementById('filename-display');
+  const cropStatus     = document.getElementById('crop-status');
+  const colorCard      = document.getElementById('color-card');
+  const colorChips     = document.getElementById('color-chips');
+  const mockRail       = document.getElementById('mock-rail');
+  const mockSidebar    = document.getElementById('mock-sidebar');
 
   const EXPORT_SIZE = 1024;
-
   let cropper = null;
   let originalFile = null;
+  let colorAnalysisTimer = null;
+  let activeColorHex = null;
 
   // ── Drag & Drop ─────────────────────────────────────────────
-  ['dragenter', 'dragover'].forEach(e => {
-    dropZone.addEventListener(e, evt => {
-      evt.preventDefault();
-      dropZone.classList.add('drag-over');
-    });
-  });
-
-  ['dragleave', 'drop'].forEach(e => {
-    dropZone.addEventListener(e, evt => {
-      evt.preventDefault();
-      dropZone.classList.remove('drag-over');
-    });
-  });
+  ['dragenter','dragover'].forEach(e =>
+    dropZone.addEventListener(e, evt => { evt.preventDefault(); dropZone.classList.add('drag-over'); })
+  );
+  ['dragleave','drop'].forEach(e =>
+    dropZone.addEventListener(e, evt => { evt.preventDefault(); dropZone.classList.remove('drag-over'); })
+  );
 
   dropZone.addEventListener('drop', evt => {
     const file = evt.dataTransfer.files[0];
@@ -513,7 +743,6 @@
   dropZone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') fileInput.click(); });
   fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadFile(fileInput.files[0]); });
 
-  // Also accept drops anywhere on the page
   document.addEventListener('dragover', e => e.preventDefault());
   document.addEventListener('drop', evt => {
     evt.preventDefault();
@@ -525,14 +754,11 @@
   function loadFile(file) {
     originalFile = file;
     filenameDisplay.textContent = file.name;
-
     const url = URL.createObjectURL(file);
     cropImage.onload = () => {
       dropZone.style.display = 'none';
       editor.classList.add('visible');
-
       if (cropper) { cropper.destroy(); cropper = null; }
-
       cropper = new Cropper(cropImage, {
         aspectRatio: 1,
         viewMode: 1,
@@ -548,44 +774,33 @@
         ready() {
           applyAutoCrop();
           updatePreview();
+          scheduleColorAnalysis(0);
         },
         crop() {
           updatePreview();
+          scheduleColorAnalysis(450);
         }
       });
     };
     cropImage.src = url;
   }
 
-  // ── Whitespace detection ─────────────────────────────────────
-  /**
-   * Returns the tightest bounding box (in natural image pixels) around
-   * non-background content.  "Background" = transparent OR near-white.
-   */
+  // ── Whitespace / content bound detection ────────────────────
   function detectContentBounds(img) {
-    const w = img.naturalWidth;
-    const h = img.naturalHeight;
-
+    const w = img.naturalWidth, h = img.naturalHeight;
     const canvas = document.createElement('canvas');
-    canvas.width = w;
-    canvas.height = h;
+    canvas.width = w; canvas.height = h;
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0);
-
     const { data } = ctx.getImageData(0, 0, w, h);
-
-    let minX = w, maxX = 0, minY = h, maxY = 0;
-    let found = false;
+    let minX = w, maxX = 0, minY = h, maxY = 0, found = false;
 
     for (let y = 0; y < h; y++) {
       for (let x = 0; x < w; x++) {
         const i = (y * w + x) * 4;
-        const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
-
-        // Transparent or very light → background
-        const isBackground = a < 15 || (r > 238 && g > 238 && b > 238 && a > 200);
-
-        if (!isBackground) {
+        const r = data[i], g = data[i+1], b = data[i+2], a = data[i+3];
+        const isBg = a < 15 || (r > 238 && g > 238 && b > 238 && a > 200);
+        if (!isBg) {
           if (x < minX) minX = x;
           if (x > maxX) maxX = x;
           if (y < minY) minY = y;
@@ -594,91 +809,270 @@
         }
       }
     }
-
-    if (!found) return null; // Couldn't detect content — all white or transparent?
-
-    return { minX, minY, maxX, maxY };
+    return found ? { minX, minY, maxX, maxY } : null;
   }
 
   function applyAutoCrop() {
     if (!cropper) return;
-
     const img = cropImage;
     const bounds = detectContentBounds(img);
-
     if (!bounds) {
-      // Fall back to full image square
       const size = Math.min(img.naturalWidth, img.naturalHeight);
-      setCropInNaturalPixels(
-        (img.naturalWidth - size) / 2,
-        (img.naturalHeight - size) / 2,
-        size, size
-      );
+      setCropInNaturalPixels((img.naturalWidth - size) / 2, (img.naturalHeight - size) / 2, size, size);
       setCropStatus('manual');
       return;
     }
-
     const { minX, minY, maxX, maxY } = bounds;
-    const contentW = maxX - minX + 1;
-    const contentH = maxY - minY + 1;
-
-    // Padding in pixels
+    const contentW = maxX - minX + 1, contentH = maxY - minY + 1;
     const rawSize = Math.max(contentW, contentH);
     const padding = Math.round(rawSize * (parseInt(paddingSlider.value, 10) / 100));
     const squareSize = rawSize + padding * 2;
-
-    const centerX = (minX + maxX) / 2;
-    const centerY = (minY + maxY) / 2;
-
-    let cropX = Math.round(centerX - squareSize / 2);
-    let cropY = Math.round(centerY - squareSize / 2);
-
-    // Clamp to image bounds
-    cropX = Math.max(0, cropX);
-    cropY = Math.max(0, cropY);
+    const centerX = (minX + maxX) / 2, centerY = (minY + maxY) / 2;
+    let cropX = Math.max(0, Math.round(centerX - squareSize / 2));
+    let cropY = Math.max(0, Math.round(centerY - squareSize / 2));
     const finalSize = Math.min(squareSize, img.naturalWidth - cropX, img.naturalHeight - cropY);
-
     setCropInNaturalPixels(cropX, cropY, finalSize, finalSize);
     setCropStatus('auto');
   }
 
-  /**
-   * Set the Cropper.js crop box using coordinates in the image's natural pixels.
-   */
   function setCropInNaturalPixels(x, y, w, h) {
     if (!cropper) return;
-    const canvasData = cropper.getCanvasData();
-    const naturalW = cropImage.naturalWidth;
-    const naturalH = cropImage.naturalHeight;
-    const scaleX = canvasData.width / naturalW;
-    const scaleY = canvasData.height / naturalH;
-
-    cropper.setCropBoxData({
-      left:   canvasData.left + x * scaleX,
-      top:    canvasData.top  + y * scaleY,
-      width:  w * scaleX,
-      height: h * scaleY,
-    });
+    const cd = cropper.getCanvasData();
+    const sx = cd.width / cropImage.naturalWidth;
+    const sy = cd.height / cropImage.naturalHeight;
+    cropper.setCropBoxData({ left: cd.left + x*sx, top: cd.top + y*sy, width: w*sx, height: h*sy });
   }
 
   // ── Preview ──────────────────────────────────────────────────
   function updatePreview() {
     if (!cropper) return;
-    const previewCtx = previewCanvas.getContext('2d');
+    const ctx = previewCanvas.getContext('2d');
     const size = previewCanvas.width;
-
     try {
-      const croppedCanvas = cropper.getCroppedCanvas({
-        width: size,
-        height: size,
-        imageSmoothingEnabled: true,
-        imageSmoothingQuality: 'high',
-      });
-      previewCtx.clearRect(0, 0, size, size);
-      previewCtx.drawImage(croppedCanvas, 0, 0, size, size);
-    } catch (e) {
-      // Might throw on CORS issues with some browsers; ignore
+      const c = cropper.getCroppedCanvas({ width: size, height: size, imageSmoothingQuality: 'high' });
+      ctx.clearRect(0, 0, size, size);
+      ctx.drawImage(c, 0, 0, size, size);
+    } catch(e) {}
+  }
+
+  // ── Color analysis ───────────────────────────────────────────
+
+  /**
+   * Convert RGB (0–1 floats) to HSL.
+   * Returns [h, s, l] where h ∈ [0,1), s ∈ [0,1], l ∈ [0,1].
+   */
+  function rgbToHsl(r, g, b) {
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const l = (max + min) / 2;
+    if (max === min) return [0, 0, l];
+    const d = max - min;
+    const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    let h;
+    if (max === r)      h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+    else if (max === g) h = ((b - r) / d + 2) / 6;
+    else                h = ((r - g) / d + 4) / 6;
+    return [h, s, l];
+  }
+
+  /** Convert HSL (0–1 floats) to an RGB hex string. */
+  function hslToHex(h, s, l) {
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    const r = Math.round(hue2rgb(p, q, h + 1/3) * 255);
+    const g = Math.round(hue2rgb(p, q, h) * 255);
+    const bv = Math.round(hue2rgb(p, q, h - 1/3) * 255);
+    return '#' + [r, g, bv].map(v => v.toString(16).padStart(2, '0')).join('');
+  }
+
+  /** WCAG relative luminance for an RGB hex string. */
+  function relativeLuminance(hex) {
+    const lin = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+    const r = parseInt(hex.slice(1,3), 16);
+    const g = parseInt(hex.slice(3,5), 16);
+    const b = parseInt(hex.slice(5,7), 16);
+    return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  }
+
+  /** Contrast ratio against #ffffff. */
+  function contrastWithWhite(hex) {
+    const L = relativeLuminance(hex);
+    return (1 + 0.05) / (L + 0.05);
+  }
+
+  /**
+   * Core color analysis.
+   *
+   * Strategy:
+   *  1. Downsample the cropped canvas to 80×80 for speed.
+   *  2. Build a saturation-weighted hue histogram (36 bins × 10°).
+   *     Pixels vote proportionally to their saturation × opacity —
+   *     vivid colors have more influence than washed-out ones.
+   *  3. Find the dominant hue (most weighted bin).
+   *  4. Black out a ±3-bin exclusion window around it, then find the
+   *     secondary hue (the next most distinct color in the image).
+   *  5. Derive three dark variants:
+   *       • "Match"      — dominant hue, S 72%, L 25%  (stays on-brand)
+   *       • "Secondary"  — second most prevalent hue (or complement if image
+   *                        is near-monochromatic), same dark treatment
+   *       • "Complement" — dominant hue rotated 180°, same dark treatment
+   *  6. Each output hex is verified to have ≥ 4.5:1 contrast vs white.
+   *     If the auto L=25% still fails (rare with high-saturation dark hues),
+   *     we nudge lightness down until it passes.
+   */
+  function analyzeImageColors(sourceCanvas) {
+    const W = 80, H = 80;
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const ctx = c.getContext('2d');
+    ctx.drawImage(sourceCanvas, 0, 0, W, H);
+    const { data } = ctx.getImageData(0, 0, W, H);
+
+    const HUE_BINS = 36;
+    const weights = new Float32Array(HUE_BINS);
+    let totalWeight = 0;
+
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i]/255, g = data[i+1]/255, b = data[i+2]/255, a = data[i+3]/255;
+      if (a < 0.12) continue;
+      const [h, s, l] = rgbToHsl(r, g, b);
+      // Skip near-transparent, near-white, near-black, near-gray
+      if (s < 0.10 || l > 0.88 || l < 0.04) continue;
+      const w = s * a;   // saturation-weighted vote
+      weights[Math.floor(h * HUE_BINS) % HUE_BINS] += w;
+      totalWeight += w;
     }
+
+    // Fallback for grayscale / near-monochrome images
+    if (totalWeight < 5) {
+      return [
+        { hex: '#1b2d3e', label: 'Slate',   desc: 'Default dark', recommended: true },
+        { hex: '#2d1b3e', label: 'Indigo',  desc: 'Complementary' },
+        { hex: '#1b3e2d', label: 'Forest',  desc: 'Analogous' },
+      ];
+    }
+
+    // Dominant hue
+    let bin1 = 0;
+    for (let i = 1; i < HUE_BINS; i++) if (weights[i] > weights[bin1]) bin1 = i;
+
+    // Secondary hue — exclude ±3 bins (30°) around dominant to ensure distinct hue
+    const w2 = Float32Array.from(weights);
+    for (let d = -3; d <= 3; d++) w2[(bin1 + d + HUE_BINS) % HUE_BINS] = 0;
+    let bin2 = 0;
+    for (let i = 1; i < HUE_BINS; i++) if (w2[i] > w2[bin2]) bin2 = i;
+
+    const hue1 = (bin1 + 0.5) / HUE_BINS;
+    const hue2 = (w2[bin2] > weights[bin1] * 0.08)
+      ? (bin2 + 0.5) / HUE_BINS          // real secondary color from image
+      : (hue1 + 30/360) % 1;             // fallback: analogous +30°
+    const hueComp = (hue1 + 0.5) % 1;
+
+    const mkColor = (h, label, desc, recommended = false) => {
+      let lightness = 0.25;
+      let hex = hslToHex(h, 0.72, lightness);
+      // Nudge darker if it somehow doesn't pass (defensive)
+      while (contrastWithWhite(hex) < 4.5 && lightness > 0.05) {
+        lightness -= 0.02;
+        hex = hslToHex(h, 0.72, lightness);
+      }
+      return { hex, label, desc, recommended };
+    };
+
+    return [
+      mkColor(hue1,    'Match',      'Dominant hue darkened', true),
+      mkColor(hue2,    'Secondary',  'Next prominent color'),
+      mkColor(hueComp, 'Complement', '180° opposite hue'),
+    ];
+  }
+
+  function scheduleColorAnalysis(delay) {
+    clearTimeout(colorAnalysisTimer);
+    colorAnalysisTimer = setTimeout(runColorAnalysis, delay);
+  }
+
+  function runColorAnalysis() {
+    if (!cropper) return;
+    try {
+      const small = cropper.getCroppedCanvas({ width: 80, height: 80 });
+      const suggestions = analyzeImageColors(small);
+      renderColorChips(suggestions);
+      colorCard.style.display = '';
+
+      // Apply the recommended color to the mock by default on first run
+      if (!activeColorHex) {
+        const rec = suggestions.find(s => s.recommended) || suggestions[0];
+        applyMockColor(rec.hex);
+      }
+    } catch(e) {}
+  }
+
+  function renderColorChips(suggestions) {
+    colorChips.innerHTML = '';
+    suggestions.forEach(s => {
+      const contrast = contrastWithWhite(s.hex).toFixed(1);
+      const chip = document.createElement('div');
+      chip.className = 'color-chip' + (s.recommended ? ' recommended' : '');
+      chip.title = `${s.desc} — click to copy`;
+      chip.innerHTML = `
+        <div class="chip-copy-feedback">Copied!</div>
+        ${s.recommended ? '<span class="rec-badge">★ Pick</span>' : '<span style="height:14px;display:block"></span>'}
+        <div class="chip-swatch">
+          <div class="chip-swatch-fill" style="background:${s.hex}"></div>
+        </div>
+        <div class="chip-hex">${s.hex}</div>
+        <div class="chip-label">${s.label}</div>
+        <div class="chip-contrast">${contrast}:1 AA ✓</div>
+      `;
+      chip.addEventListener('click', () => {
+        navigator.clipboard.writeText(s.hex).catch(() => {});
+        chip.classList.add('copied');
+        setTimeout(() => chip.classList.remove('copied'), 1400);
+        applyMockColor(s.hex);
+        activeColorHex = s.hex;
+        document.querySelectorAll('.color-chip').forEach(c => c.classList.remove('recommended'));
+        chip.classList.add('recommended');
+      });
+      colorChips.appendChild(chip);
+    });
+  }
+
+  /** Update the Slack mockup preview with the chosen sidebar color */
+  function applyMockColor(hex) {
+    mockRail.style.background = hex;
+    mockSidebar.style.background = adjustLightness(hex, 1.12); // slightly lighter for sidebar
+
+    // Draw icon into the mock rail dot and sidebar thumb
+    if (cropper) {
+      try {
+        const iconC = cropper.getCroppedCanvas({ width: 22, height: 22, imageSmoothingQuality: 'high' });
+        const rail = document.getElementById('mock-icon-canvas');
+        rail.getContext('2d').drawImage(iconC, 0, 0, 22, 22);
+
+        const thumb = document.getElementById('mock-icon-thumb-canvas');
+        thumb.getContext('2d').drawImage(iconC, 0, 0, 14, 14);
+      } catch(e) {}
+    }
+  }
+
+  /**
+   * Adjust the lightness of a hex color by a multiplier.
+   * multiplier > 1 = lighter, < 1 = darker.
+   */
+  function adjustLightness(hex, multiplier) {
+    const r = parseInt(hex.slice(1,3),16)/255;
+    const g = parseInt(hex.slice(3,5),16)/255;
+    const b = parseInt(hex.slice(5,7),16)/255;
+    let [h, s, l] = rgbToHsl(r, g, b);
+    l = Math.min(1, l * multiplier);
+    return hslToHex(h, s, l);
   }
 
   // ── Controls ─────────────────────────────────────────────────
@@ -696,11 +1090,7 @@
     if (!cropper) return;
     const img = cropImage;
     const size = Math.min(img.naturalWidth, img.naturalHeight);
-    setCropInNaturalPixels(
-      (img.naturalWidth - size) / 2,
-      (img.naturalHeight - size) / 2,
-      size, size
-    );
+    setCropInNaturalPixels((img.naturalWidth-size)/2, (img.naturalHeight-size)/2, size, size);
     setCropStatus('manual');
     updatePreview();
   });
@@ -711,34 +1101,25 @@
     dropZone.style.display = '';
     fileInput.value = '';
     originalFile = null;
+    activeColorHex = null;
+    colorCard.style.display = 'none';
   });
 
   // ── Export ───────────────────────────────────────────────────
   exportBtn.addEventListener('click', () => {
     if (!cropper) return;
-
-    const croppedCanvas = cropper.getCroppedCanvas({
-      width: EXPORT_SIZE,
-      height: EXPORT_SIZE,
-      imageSmoothingEnabled: true,
-      imageSmoothingQuality: 'high',
+    const cropped = cropper.getCroppedCanvas({
+      width: EXPORT_SIZE, height: EXPORT_SIZE,
+      imageSmoothingEnabled: true, imageSmoothingQuality: 'high',
     });
-
-    // Force white background (PNG with transparency is valid too but Slack may need it)
-    const finalCanvas = document.createElement('canvas');
-    finalCanvas.width = EXPORT_SIZE;
-    finalCanvas.height = EXPORT_SIZE;
-    const ctx = finalCanvas.getContext('2d');
-    // Transparent background — Slack supports it
-    ctx.drawImage(croppedCanvas, 0, 0);
-
-    finalCanvas.toBlob(blob => {
-      const baseName = originalFile
-        ? originalFile.name.replace(/\.[^.]+$/, '')
-        : 'icon';
+    const final = document.createElement('canvas');
+    final.width = EXPORT_SIZE; final.height = EXPORT_SIZE;
+    final.getContext('2d').drawImage(cropped, 0, 0);
+    final.toBlob(blob => {
+      const base = originalFile ? originalFile.name.replace(/\.[^.]+$/, '') : 'icon';
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `${baseName}-slack-icon.png`;
+      a.download = `${base}-slack-icon.png`;
       a.click();
       URL.revokeObjectURL(a.href);
     }, 'image/png');
@@ -750,7 +1131,6 @@
     cropStatus.textContent = mode === 'auto' ? 'auto-crop' : 'manual crop';
   }
 
-  // Mark as manual when user moves crop box themselves
   document.addEventListener('cropend', () => setCropStatus('manual'));
 })();
 </script>
