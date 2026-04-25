@@ -557,7 +557,7 @@
 <header>
   <div class="logo">✦</div>
   <h1>Slack App Icon Cropper</h1>
-  <span class="badge">PNG · 1024×1024</span>
+  <span class="badge">JPG · 1024×1024</span>
   <span class="subtitle">Auto-detects whitespace · Forces square crop</span>
 </header>
 
@@ -663,7 +663,7 @@
         <h3>Slack requirements</h3>
         <div class="spec-row">
           <span class="label">Format</span>
-          <span class="value ok">PNG</span>
+          <span class="value ok">JPG (q=92)</span>
         </div>
         <div class="spec-row">
           <span class="label">Aspect ratio</span>
@@ -686,7 +686,7 @@
           <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
             <path d="M12 3v13M7 11l5 5 5-5M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          Download icon.png
+          Download icon.jpg
         </button>
         <div style="margin-top: 8px">
           <button class="btn btn-secondary" id="new-image-btn">
@@ -1121,15 +1121,19 @@
     });
     const final = document.createElement('canvas');
     final.width = EXPORT_SIZE; final.height = EXPORT_SIZE;
-    final.getContext('2d').drawImage(cropped, 0, 0);
+    const ctx = final.getContext('2d');
+    // JPG has no alpha — flatten onto selected color (or white)
+    ctx.fillStyle = activeColorHex || '#ffffff';
+    ctx.fillRect(0, 0, EXPORT_SIZE, EXPORT_SIZE);
+    ctx.drawImage(cropped, 0, 0);
     final.toBlob(blob => {
       const base = originalFile ? originalFile.name.replace(/\.[^.]+$/, '') : 'icon';
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `${base}-slack-icon.png`;
+      a.download = `${base}-slack-icon.jpg`;
       a.click();
       URL.revokeObjectURL(a.href);
-    }, 'image/png');
+    }, 'image/jpeg', 0.92);
   });
 
   // ── Helpers ──────────────────────────────────────────────────
